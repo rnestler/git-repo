@@ -84,6 +84,7 @@ class GitlabService(RepositoryService):
 
     def gist_list(self, project=None):
         if not project:
+            # TODO handle pagination
             for project in self.gl.projects.list(per_page=100):
                 for snippet in project.snippets.list(per_page=100):
                     yield ('https://{}/{}/{}/snippets/{}'.format(
@@ -187,17 +188,19 @@ class GitlabService(RepositoryService):
         except Exception as err:
             raise ResourceError("Unhandled error: {}".format(err)) from err
 
-        return {'local': local_branch, 'remote': remote_branch, 'ref': request.number}
+        return {'local': local_branch,
+                'remote': remote_branch,
+                'ref': request.iid}
 
     def request_list(self, user, repo):
         project = self.gl.projects.list(search=repo)[0]
-        for request in self.gl.project_mergerequests.list(project_id=project.id):
-            yield ( str(request.iid),
-                    request.title,
+        for mr in self.gl.project_mergerequests.list(project_id=project.id):
+            yield ( str(mr.iid),
+                    mr.title,
                     'https://{}/{}/{}/merge_requests/{}'.format(
                         self.fqdn,
-                        p.namespace.name,
-                        p.name,
+                        project.namespace.name,
+                        project.name,
                         mr.iid
                         )
                     )
