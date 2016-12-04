@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-'''
+"""
 Usage:
     {self} [--path=<path>] [-v...] <target> fork [--branch=<branch>]
     {self} [--path=<path>] [-v...] <target> create [--add]
@@ -112,7 +112,7 @@ Configuration example:
 {self} comes with ABSOLUTELY NO WARRANTY; for more informations
 read the LICENSE file available in the sources, or check
 out: http://www.gnu.org/licenses/gpl-2.0.txt
-'''
+"""
 
 from docopt import docopt
 
@@ -146,10 +146,10 @@ import re
 EXTRACT_URL_RE = re.compile('[^:]*(://|@)[^/]*/')
 
 def confirm(what, where):
-    '''
+    """
     Method to show a CLI based confirmation message, waiting for a yes/no answer.
     "what" and "where" are used to better define the message.
-    '''
+    """
     ans = input('Are you sure you want to delete the '
                 '{} {} from the service?\n[yN]> '.format(what, where))
     if 'y' in ans:

@@ -22,7 +22,7 @@ else: #pragma: no cover
 
 
 class ProgressBar(RemoteProgress): # pragma: no cover
-    '''Nice looking progress bar for long running commands'''
+    """Nice looking progress bar for long running commands"""
     def setup(self, repo_name):
         self.bar = Bar(message='Pulling from {}'.format(repo_name), suffix='')
 
@@ -47,7 +47,7 @@ def register_target(repo_cmd, repo_service):
 
 
 class RepositoryService:
-    '''Base class for all repository services'''
+    """Base class for all repository services"""
     service_map = dict()
     command_map = dict()
 
@@ -83,12 +83,12 @@ class RepositoryService:
 
     @classmethod
     def get_service(cls, repository, command):
-        '''Accessor for a repository given a command
+        """Accessor for a repository given a command
 
         :param repository: git-python repository instance
         :param command: aliased name of the service
         :return: instance for using the service
-        '''
+        """
         if not repository:
             config = git_config.GitConfigParser(os.path.join(os.environ['HOME'], '.gitconfig'))
         else:
@@ -126,13 +126,13 @@ class RepositoryService:
         raise NotImplementedError
 
     def __init__(self, r=None, c=None):
-        '''
+        """
         :param r: git-python repository instance
         :param c: configuration data
 
         Build a repository service instance, store configuration and parameters
         And launch the connection to the service
-        '''
+        """
 
         self.repository = r
         self.config = c
@@ -168,7 +168,7 @@ class RepositoryService:
 
     @property
     def url_ro(self):
-        '''Property that returns the HTTP URL of the service'''
+        """Property that returns the HTTP URL of the service"""
         return 'https://{}'.format(self.fqdn)
 
     @property
@@ -176,7 +176,7 @@ class RepositoryService:
         return '{}@{}'.format(self.git_user, self.fqdn)
 
     def format_path(self, repository, namespace=None, rw=False):
-        '''format the repository's URL
+        """format the repository's URL
 
         :param repository: name of the repository
         :param namespace: namespace of the repository
@@ -185,7 +185,7 @@ class RepositoryService:
 
         if namespace is not given, repository is expected to be of format
         `<namespace>/<repository>`.
-        '''
+        """
         repo = repository
         if namespace:
             repo = '{}/{}'.format(namespace, repository)
@@ -198,10 +198,10 @@ class RepositoryService:
             raise ArgumentError("Cannot tell how to handle this url: `{}/{}`!".format(namespace, repo))
 
     def pull(self, remote, branch=None):
-        '''Pull a repository
+        """Pull a repository
         :param remote: git-remote instance
         :param branch: name of the branch to pull
-        '''
+        """
         pb = ProgressBar()
         pb.setup(self.name)
         if branch:
@@ -211,17 +211,17 @@ class RepositoryService:
         print()
 
     def fetch(self, remote, remote_branch, local_branch):
-        '''Pull a repository
+        """Pull a repository
         :param remote: git-remote instance
         :param branch: name of the branch to pull
-        '''
+        """
         pb = ProgressBar()
         pb.setup(self.name)
         remote.fetch(':'.join([remote_branch, local_branch]), progress=pb)
         print()
 
     def clone(self, user, repo, branch='master', rw=True):
-        '''Clones a new repository
+        """Clones a new repository
 
         :param user: namespace of the repository
         :param repo: name slug of the repository
@@ -230,14 +230,14 @@ class RepositoryService:
         This command is fairly simple, and pretty close to the real `git clone`
         command, except it does not take a full path, but just a namespace/slug
         path for a given service.
-        '''
+        """
         log.info('Cloning {}…'.format(repo))
 
         remote = self.add(user=user, repo=repo, tracking=True, rw=rw)
         self.pull(remote, branch)
 
     def add(self, repo, user=None, name=None, tracking=False, alone=False, rw=True):
-        '''Adding repository as remote
+        """Adding repository as remote
 
         :param repo: Name slug of the repository to add
         :param name: Name of the remote when stored
@@ -251,7 +251,7 @@ class RepositoryService:
 
         It also creates an *all* remote that contains all the remotes added by
         this tool, to make it possible to push to all remotes at once.
-        '''
+        """
         name = name or self.name
 
         if not user:
@@ -321,96 +321,96 @@ class RepositoryService:
                                                                    fork_name))
 
     def open(self, user=None, repo=None):
-        '''Open the URL of a repository in the user's browser'''
+        """Open the URL of a repository in the user's browser"""
         call([OPEN_COMMAND, self.format_path(repo, namespace=user, rw=False)])
 
     def connect(self): #pragma: no cover
-        '''Brings up the connection to the remote service's API
+        """Brings up the connection to the remote service's API
 
         Meant to be overloaded by subclass
-        '''
+        """
         raise NotImplementedError
 
     def delete(self, repo, user=None): #pragma: no cover
-        '''Delete a remote repository on the service
+        """Delete a remote repository on the service
 
         :param repo: name of the remote repository to delete
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def create(self, user, repo, add=False): #pragma: no cover
-        '''Create a new remote repository on the service
+        """Create a new remote repository on the service
 
         :param repo: name of the repository to create
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def fork(self, user, repo): #pragma: no covr
-        '''Forks a new remote repository on the service
+        """Forks a new remote repository on the service
         and pulls commits from it
 
         :param repo: name of the repository to create
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def gist_list(self):
-        '''Lists gists
+        """Lists gists
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def gist_fetch(self, gist): #pragma: no cover
-        '''Fetches a published gist
+        """Fetches a published gist
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def gist_clone(self, gist): #pragma: no cover
-        '''Clones a gist
+        """Clones a gist
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def gist_create(self, gist_path, secret=False): #pragma: no cover
-        '''Pushes a new gist
+        """Pushes a new gist
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def gist_delete(self, gist_path, secret=False): #pragma: no cover
-        '''Deletes a new gist
+        """Deletes a new gist
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def request_list(self, user, repo): #pragma: no cover
-        '''Lists all available request for merging code
+        """Lists all available request for merging code
         sent to the remote repository
 
         :param repo: name of the repository to create
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     def request_fetch(self, user, repo, request, pull=False): #pragma: no cover
-        '''Fetches given request as a branch, and switch if pull is true
+        """Fetches given request as a branch, and switch if pull is true
 
         :param repo: name of the repository to create
 
         Meant to be implemented by subclasses
-        '''
+        """
         raise NotImplementedError
 
     @property

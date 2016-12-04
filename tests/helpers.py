@@ -675,7 +675,7 @@ class GitRepoTestCase(TestGitPopenMockupMixin):
             title, description,
             create_repository='test_create_requests',
             create_branch='pr-test'):
-        '''
+        """
         Here we are testing the subcommand 'request create'.
 
         this test needs sensibly more preparation than other tests, because to create
@@ -697,7 +697,7 @@ class GitRepoTestCase(TestGitPopenMockupMixin):
         Finally clean the remote repository
 
         So all the contextual work is only done
-        '''
+        """
         cassette_name = self._make_cassette_name()
         will_record = 'never' != self.recorder.config.default_cassette_options['record_mode'] \
                 and not os.path.exists(os.path.join(self.recorder.config.cassette_library_dir, cassette_name+'.json'))

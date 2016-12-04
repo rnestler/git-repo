@@ -10,11 +10,11 @@ import bitbucket.bitbucket as bitbucket
 from requests import Request, Session
 import json
 
-'''
+"""
 Extension of the bitbucket module implementation to add support for the extra
 features the original implementation lacked. This is a temporary measure, up
 until a PR is crafted for the original code.
-'''
+"""
 
 bitbucket.URLS.update({
     'GET_REPO' : 'repositories/%(username)s/%(repo_slug)s/',

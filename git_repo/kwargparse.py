@@ -4,7 +4,7 @@ import logging
 log = logging.getLogger('git_repo.kwargparse')
 
 class KeywordArgumentParser:
-    '''
+    """
     Argument parser tailored for use with docopt:
 
     Will parse all arguments returned by docopt, and will store them as instance
@@ -19,30 +19,30 @@ class KeywordArgumentParser:
     Then the keywords used as arguments of the program will be used to call an
     "action" method, which have been decorated with "register_action".
 
-    '''
+    """
     _action_dict = dict()
     _parameter_dict = dict()
 
     def __init__(self, args):
-        '''
+        """
         Stores the docopt args as class member
-        '''
+        """
         self.args = args
 
     def init(self):
-        '''
+        """
         method to be defined for anything that needs to be done before launching
         the parser.
-        '''
+        """
         pass
 
     def run(self):
-        '''
+        """
         This method iterates over the docopt's arguments and matches them against
         the parameters list. All leftover values are used to resolve the action to
         run, and it will run the action, or run the fallback() method if no action
         is found.
-        '''
+        """
         self.init()
 
         args = []
@@ -77,20 +77,20 @@ class KeywordArgumentParser:
 
 
 def store_parameter(parameter):
-    '''
+    """
     Decorator for a parameter, use the full length parameter name as specified in the
     docopt configuration, like '--verbose'
-    '''
+    """
     def decorator(fun):
         KeywordArgumentParser._parameter_dict[parameter] = fun
         return fun
     return decorator
 
 def register_action(*args, **kwarg):
-    '''
+    """
     Decorator for an action, the arguments order is not relevant, but it's best
     to use the same order as in the docopt for clarity.
-    '''
+    """
     def decorator(fun):
         KeywordArgumentParser._action_dict[frozenset(args)] = fun
         return fun
